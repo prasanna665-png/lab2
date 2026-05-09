@@ -1,12 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>My App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 360px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #0b6cfb;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .tab.active {
+            background: white;
+            color: #0b6cfb;
+            font-weight: bold;
+        }
+
+        .form-panel {
+            padding: 28px 30px;
+        }
+
+        .form-panel h2 {
+            margin: 0 0 18px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .form-panel input {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-panel button {
+            width: 100%;
+            padding: 12px 0;
+            margin-top: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #0b6cfb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-panel button:hover {
+            background: #0952c5;
+        }
+
+        .message {
+            margin-top: 12px;
+            color: #2f8a36;
+            font-size: 14px;
+            display: none;
+        }
+
+        .site-view {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+
+        .success-screen {
+            display: none;
+            width: 360px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+            padding: 28px 30px;
+            text-align: center;
+        }
+
+        .success-screen h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .success-screen p {
+            color: #555;
+            margin: 16px 0;
+        }
+
+        .success-screen a {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: #0b6cfb;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>hello world</h1>
+    <div class="container" id="auth-container">
+        <div class="tabs">
+            <div class="tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</div>
+            <div class="tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</div>
+        </div>
+
+        <div class="form-panel" id="panel-signin">
+            <h2>Welcome Back</h2>
+            <form onsubmit="handleSubmit(event, 'signin')">
+                <input type="text" id="signin-username" placeholder="Username" required>
+                <input type="password" id="signin-password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </form>
+            <div class="message" id="signin-message">Signing in...</div>
+        </div>
+
+        <div class="form-panel" id="panel-signup" style="display:none;">
+            <h2>Create Account</h2>
+            <form onsubmit="handleSubmit(event, 'signup')">
+                <input type="text" id="signup-username" placeholder="Username" required>
+                <input type="email" id="signup-email" placeholder="Email" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div class="message" id="signup-message">Creating account...</div>
+        </div>
+    </div>
+
+    <div class="success-screen" id="success-screen">
+        <h2>Logged In Successfully</h2>
+        <p>Redirecting to the requested page now.</p>
+        <a href="https://www.isquareit.edu.in/this" target="_blank">Open in new tab</a>
+    </div>
+
+    <iframe class="site-view" id="site-frame" src=""></iframe>
+
+    <script>
+        function switchTab(tab) {
+            document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+            document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+            document.getElementById('panel-signin').style.display = tab === 'signin' ? 'block' : 'none';
+            document.getElementById('panel-signup').style.display = tab === 'signup' ? 'block' : 'none';
+        }
+
+        function handleSubmit(event, mode) {
+            event.preventDefault();
+
+            var messageId = mode === 'signin' ? 'signin-message' : 'signup-message';
+            var messageEl = document.getElementById(messageId);
+            messageEl.style.display = 'block';
+            messageEl.textContent = mode === 'signin' ? 'Signing in...' : 'Creating your account...';
+
+            setTimeout(function () {
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+
+                var iframe = document.getElementById('site-frame');
+                iframe.src = 'https://www.isquareit.edu.in/this';
+                iframe.style.display = 'block';
+            }, 900);
+        }
+    </script>
 </body>
 
 </html>
